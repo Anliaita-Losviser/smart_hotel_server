@@ -1,5 +1,6 @@
 package com.smartHotel.service.impl;
 
+import com.smartHotel.config.SnowflakeIdGenerator;
 import com.smartHotel.constant.MessageConstant;
 import com.smartHotel.constant.StatusConstant;
 import com.smartHotel.dto.EmployeeLoginDTO;
@@ -51,6 +52,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+    
+    private SnowflakeIdGenerator snowflakeIdGenerator;
+
+    @Autowired
+    public void UserService(SnowflakeIdGenerator snowflakeIdGenerator) {
+        this.snowflakeIdGenerator = snowflakeIdGenerator;
+    }
+
+    public long generateUserId() {
+        return snowflakeIdGenerator.nextId();
     }
 
 }
