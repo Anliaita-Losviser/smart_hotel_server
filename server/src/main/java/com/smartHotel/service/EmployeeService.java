@@ -1,7 +1,7 @@
 package com.smartHotel.service;
 
 import com.smartHotel.dto.EmployeeLoginDTO;
-import com.smartHotel.entity.Employee;
+import com.smartHotel.entity.Employees;
 
 public interface EmployeeService {
 
@@ -10,7 +10,11 @@ public interface EmployeeService {
      * @param employeeLoginDTO
      * @return
      */
-    Employee login(EmployeeLoginDTO employeeLoginDTO);
+    Employees login(EmployeeLoginDTO employeeLoginDTO);
     
+    /**
+     * 生成id
+     * @return
+     */
     long generateUserId();
 }

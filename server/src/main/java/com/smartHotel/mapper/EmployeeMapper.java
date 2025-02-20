@@ -1,6 +1,6 @@
 package com.smartHotel.mapper;
 
-import com.smartHotel.entity.Employee;
+import com.smartHotel.entity.Employees;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -12,7 +12,7 @@ public interface EmployeeMapper {
      * @param username
      * @return
      */
-    @Select("select * from employee where username = #{username}")
-    Employee getByUsername(String username);
+    @Select("select * from employees where username = #{username}")
+    Employees getByUsername(String username);
 
 }

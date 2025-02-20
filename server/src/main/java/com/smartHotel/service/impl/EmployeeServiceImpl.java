@@ -4,7 +4,7 @@ import com.smartHotel.config.SnowflakeIdGenerator;
 import com.smartHotel.constant.MessageConstant;
 import com.smartHotel.constant.StatusConstant;
 import com.smartHotel.dto.EmployeeLoginDTO;
-import com.smartHotel.entity.Employee;
+import com.smartHotel.entity.Employees;
 import com.smartHotel.exception.AccountLockedException;
 import com.smartHotel.exception.AccountNotFoundException;
 import com.smartHotel.exception.PasswordErrorException;
@@ -12,6 +12,7 @@ import com.smartHotel.mapper.EmployeeMapper;
 import com.smartHotel.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -25,12 +26,15 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param employeeLoginDTO
      * @return
      */
-    public Employee login(EmployeeLoginDTO employeeLoginDTO) {
+    @Override
+    public Employees login(EmployeeLoginDTO employeeLoginDTO) {
         String username = employeeLoginDTO.getUsername();
         String password = employeeLoginDTO.getPassword();
+        
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         //1、根据用户名查询数据库中的数据
-        Employee employee = employeeMapper.getByUsername(username);
+        Employees employee = employeeMapper.getByUsername(username);
 
         //2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
         if (employee == null) {
@@ -45,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
-        if (employee.getStatus() == StatusConstant.DISABLE) {
+        if (employee.getStatus().equals(StatusConstant.DISABLE)) {
             //账号被锁定
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
         }
@@ -61,6 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
+    @Override
     public long generateUserId() {
         return snowflakeIdGenerator.nextId();
     }
