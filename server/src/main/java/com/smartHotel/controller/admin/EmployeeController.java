@@ -1,19 +1,21 @@
 package com.smartHotel.controller.admin;
 
 import com.smartHotel.constant.JwtClaimsConstant;
+import com.smartHotel.constant.MessageConstant;
 import com.smartHotel.dto.EmployeeDTO;
+import com.smartHotel.dto.EmployeeEditPasswordDTO;
 import com.smartHotel.dto.EmployeeLoginDTO;
+import com.smartHotel.dto.EmployeePageQueryDTO;
 import com.smartHotel.entity.Employees;
 import com.smartHotel.properties.JwtProperties;
+import com.smartHotel.result.PageResult;
 import com.smartHotel.result.Result;
 import com.smartHotel.service.EmployeeService;
-import com.smartHotel.service.IdGenerateService;
 import com.smartHotel.utils.JwtUtil;
 import com.smartHotel.vo.EmployeeLoginVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,9 +32,9 @@ import java.util.Map;
 @Schema(description = "员工管理控制器与相关接口")
 public class EmployeeController {
 
-    @Autowired
+    @Resource(name = "employeeServiceImpl")
     private EmployeeService employeeService;
-    @Autowired
+    @Resource(name = "jwtProperties")
     private JwtProperties jwtProperties;
 
     /**
@@ -86,21 +88,69 @@ public class EmployeeController {
     @PostMapping
     public Result addNewEmployee(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工:{}",employeeDTO);
-        
         employeeService.addNewEmployee(employeeDTO);
         return Result.success();
     }
     
-    
-    @Resource(name = "idGenerateServiceImpl")
-    private IdGenerateService idGenerateService;
     /**
-     * 雪花算法生成id
+     * 分页查询
+     * @param employeePageQueryDTO
      * @return
      */
-    @GetMapping("/generate-id")
-    public String generateId() {
-        long id = idGenerateService.generateUserId();
-        return "生成的 ID: " + id;
+    @Operation(summary = "员工分页查询")
+    @GetMapping("/page")
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
+        log.info("员工分页查询：{}", employeePageQueryDTO);
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
+        return Result.success(pageResult);
+    }
+    
+    /**
+     * 启用或禁用账号
+     * @return
+     */
+    @Operation(summary = "启用或禁用账号")
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable("status") Integer status,Long id){
+        log.info("启用或禁用员工账号{},{}",id,status);
+        employeeService.startOrStop(status,id);
+        return Result.success(MessageConstant.OPRATION_SUCCESS);
+    }
+    
+    /**
+     * 根据ID查询员工
+     * @param id
+     * @return
+     */
+    @Operation(summary = "根据ID查询员工")
+    @GetMapping("/{id}")
+    public Result<Employees> getById(@PathVariable Long id){
+        Employees employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+    
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     * @return
+     */
+    @Operation(summary = "编辑员工信息")
+    @PutMapping
+    public Result update(@RequestBody EmployeeDTO employeeDTO){
+        log.info("编辑员工信息:{}",employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
+    
+    /**
+     * 修改密码
+     * @return
+     */
+    @Operation(summary = "修改密码")
+    @PutMapping("/editPassword")
+    public Result editPassword(@RequestBody EmployeeEditPasswordDTO employeeEditPasswordDTO){
+        log.info("修改密码");
+        employeeService.editPassword(employeeEditPasswordDTO);
+        return Result.success();
     }
 }
