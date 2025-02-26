@@ -1,5 +1,6 @@
 package com.smartHotel.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.Page;
 import com.smartHotel.dto.EmployeePageQueryDTO;
 import com.smartHotel.entity.Employees;
@@ -8,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
-public interface EmployeeMapper {
+public interface EmployeeMapper extends BaseMapper<Employees> {
 
     /**
      * 根据用户名查询员工
@@ -17,15 +18,7 @@ public interface EmployeeMapper {
      */
     @Select("select * from employees where username = #{username}")
     Employees getByUsername(String username);
-    
-    /**
-     * 新增员工
-     * @param employees
-     */
-    @Insert("insert into employees values "+
-            "(#{id},#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{authority},#{createTime},#{updateTime})")
-    void insert(Employees employees);
-    
+
     /**
      * 分页查询
      * @param employeePageQueryDTO
@@ -33,17 +26,4 @@ public interface EmployeeMapper {
      */
     Page<Employees> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
     
-    /**
-     * 更新字段
-     * @param employees
-     */
-    void update(Employees employees);
-    
-    /**
-     * 根据ID查询员工
-     * @param id
-     * @return
-     */
-    @Select("select * from employees where id = #{id}")
-    Employees getById(Long id);
 }

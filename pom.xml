@@ -6,7 +6,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>3.3.7</version>
+        <version>3.4.1</version>
     </parent>
     <groupId>com.smartHotel</groupId>
     <artifactId>smart-hotel</artifactId>
@@ -19,7 +19,6 @@
     </modules>
     <properties>
         <java.version>17</java.version>
-        <mybatis.spring>3.0.3</mybatis.spring>
         <lombok>1.18.36</lombok>
         <fastjson>1.2.83</fastjson>
         <commons.lang>2.6</commons.lang>
@@ -33,10 +32,25 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            
             <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.spring}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>3.5.7</version>
+            </dependency>
+            
+            <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+            
+            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>3.4.2</version>
             </dependency>
             
             <dependency>
@@ -147,18 +161,6 @@
                 <version>4.0.1</version>
             </dependency>
             
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>3.5.1</version>
-            </dependency>
-            
-            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-jpa</artifactId>
-                <version>3.4.2</version>
-            </dependency>
             <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
             <dependency>
                 <groupId>javax.annotation</groupId>

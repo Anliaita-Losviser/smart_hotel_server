@@ -129,8 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .status(status)
                 .id(id)
                 .build();
-        
-        employeeMapper.update(employees);
+        employeeMapper.updateById(employees);
     }
     
     /**
@@ -140,7 +139,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public Employees getById(Long id) {
-        Employees employee = employeeMapper.getById(id);
+        Employees employee = employeeMapper.selectById(id);
         employee.setPassword("******");
         return employee;
     }
@@ -154,7 +153,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employees employee = EmployeeMapStruct.instance.convertToEmployees(employeeDTO);
         employee.setUpdateTime(LocalDateTime.now());
         log.info("即将更新：{}",employee);
-        employeeMapper.update(employee);
+        employeeMapper.updateById(employee);
     }
     
     /**
@@ -164,11 +163,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void editPassword(EmployeeEditPasswordDTO employeeEditPasswordDTO) {
         //先查询要修改的员工
-        Employees employee = employeeMapper.getById(employeeEditPasswordDTO.getEmpId());
+        Employees employee = employeeMapper.selectById(employeeEditPasswordDTO.getEmpId());
         //设置新密码
         employee.setPassword(DigestUtils.md5DigestAsHex(employeeEditPasswordDTO.getNewPassword().getBytes()));
         employee.setUpdateTime(LocalDateTime.now());
-        employeeMapper.update(employee);
+        employeeMapper.updateById(employee);
     }
     
 }

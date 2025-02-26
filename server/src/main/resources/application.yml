@@ -15,15 +15,29 @@ spring:
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
   jpa:
+    database: MYSQL
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true  # 格式化SQL
+        # 生成SQL 驼峰命名属性，默认加下划线的情况，下面配置可以去掉下划线。
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
-mybatis:
+
+mybatis-plus:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.smartHotel.entity
   configuration:
     #开启驼峰命名
     map-underscore-to-camel-case: true
+    #开启日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   level:
